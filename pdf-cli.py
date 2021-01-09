@@ -38,8 +38,11 @@ def main(src, dest, start, count):
                 output_stream = open(dest, 'wb+')
             writer = PyPDF2.PdfFileWriter()
             count = count if count > 0 else reader.numPages
-            i = 0
-            while i < count:
+
+            if start < 0 or (start + count) >= reader.numPages:
+                raise ValueError("invalid start: %d" % start)
+            i = start
+            while i < (start + count):
                 writer.addPage(reader.getPage(i))
                 i += 1
             writer.write(output_stream)
