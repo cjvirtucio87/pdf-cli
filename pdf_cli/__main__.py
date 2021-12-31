@@ -5,7 +5,8 @@ Entrypoint for app.
 import sys
 
 import click
-import PyPDF2
+
+from pdf_cli.pdfs import pdfs
 
 def _to_skip_set(skip):
     if skip is None:
@@ -68,25 +69,10 @@ def crop(count, dest, src, start, skip):
     Crop COUNT number of pages from pdf file at SRC into DEST, starting from page START.
     """
     skip_set = _to_skip_set(skip)
-
-    with open(src, 'rb') as src_pdf:
-        reader = PyPDF2.PdfFileReader(src_pdf)
-
-        with (open(dest, 'wb+') \
-                if dest is not None \
-                else sys.stdout) as output_stream:
-            writer = PyPDF2.PdfFileWriter()
-            count = count if count > 0 else reader.numPages
-
-            if start < 0 or (start + count) >= reader.numPages:
-                raise ValueError(f"invalid start: {start}")
-            i = start
-            while i < (start + count):
-                if skip_set is None or i not in skip_set:
-                    writer.addPage(reader.getPage(i))
-
-                i += 1
-            writer.write(output_stream)
+    with (open(dest, 'wb+') \
+            if dest is not None \
+            else sys.stdout) as output_stream:
+        pdfs.crop(count, src, start, skip_set, output_stream)
 
 if __name__ == '__main__':
     main()
