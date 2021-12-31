@@ -5,6 +5,7 @@ Entrypoint for app.
 import sys
 
 import click
+import PyPDF2
 
 from pdf_cli.pdfs import pdfs
 
@@ -72,7 +73,10 @@ def crop(count, dest, src, start, skip):
     with (open(dest, 'wb+') \
             if dest is not None \
             else sys.stdout) as output_stream:
-        pdfs.crop(count, src, start, skip_set, output_stream)
+        with open(src, 'rb') as src_pdf:
+            reader = PyPDF2.PdfFileReader(src_pdf)
+            writer = PyPDF2.PdfFileWriter()
+            pdfs.crop(reader, writer, output_stream, count, start, skip_set)
 
 if __name__ == '__main__':
     main()

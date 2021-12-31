@@ -2,29 +2,26 @@
 pdfs library module.
 """
 
-import PyPDF2
-
-def crop(count: int, src: str, start: int, skip_set, output_stream):
+def crop(pdf_reader, pdf_writer, output_stream, count: int = -1, start: int = 0, skip_set = None): # pylint: disable=too-many-arguments
     """
-    Crop ``count`` number of pages from pdf file at
-    ``src`` into ``output_stream``, starting from page ``start``.
+    Crop ``count`` number of pages from the source pdf file
+    into ``output_stream``, starting from page ``start``.
 
-    :param count: number of pages to crop.
-    :param src: source PDF file.
-    :param start: starting page in ``src`` to crop.
+    :param pdf_reader: object for reading the source PDF.
+    :param pdf_writer: object for writing the cropped PDF file into the ``output_stream``.
     :param output_stream: where the cropped output will be written to.
+    :param count: number of pages to crop.
+    :param start: starting page in ``src`` to crop.
+    :param skip_set: the page numbers to skip.
     """
-    with open(src, 'rb') as src_pdf:
-        reader = PyPDF2.PdfFileReader(src_pdf)
-        writer = PyPDF2.PdfFileWriter()
-        count = count if count > 0 else reader.numPages
+    count = count if count > 0 else pdf_reader.numPages
 
-        if start < 0 or (start + count) >= reader.numPages:
-            raise ValueError(f"invalid start: {start}")
-        i = start
-        while i < (start + count):
-            if skip_set is None or i not in skip_set:
-                writer.addPage(reader.getPage(i))
+    if start < 0 or (start + count) > pdf_reader.numPages:
+        raise ValueError(f"invalid start: {start}")
+    i = start
+    while i < (start + count):
+        if skip_set is None or i not in skip_set:
+            pdf_writer.addPage(pdf_reader.getPage(i))
 
-            i += 1
-        writer.write(output_stream)
+        i += 1
+    pdf_writer.write(output_stream)
