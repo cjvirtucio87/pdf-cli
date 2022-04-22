@@ -6,5 +6,5 @@
 #
 click==8.0.3
     # via -r requirements.in
-pypdf2==1.26.0
+pypdf2==1.27.5
     # via -r requirements.in
