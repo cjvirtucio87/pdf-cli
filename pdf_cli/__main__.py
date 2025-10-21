@@ -74,8 +74,8 @@ def crop(count, dest, src, start, skip):
             if dest is not None \
             else sys.stdout) as output_stream:
         with open(src, 'rb') as src_pdf:
-            reader = PyPDF2.PdfFileReader(src_pdf)
-            writer = PyPDF2.PdfFileWriter()
+            reader = PyPDF2.PdfReader(src_pdf)
+            writer = PyPDF2.PdfWriter()
             pdfs.crop(reader, writer, output_stream, count, start, skip_set)
 
 if __name__ == '__main__':
