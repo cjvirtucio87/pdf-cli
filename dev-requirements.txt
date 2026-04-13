@@ -6,8 +6,6 @@
 #
 astroid==2.14.2
     # via pylint
-attrs==22.2.0
-    # via pytest
 dill==0.3.6
     # via pylint
 iniconfig==2.0.0
@@ -22,11 +20,13 @@ packaging==23.0
     # via pytest
 platformdirs==3.1.0
     # via pylint
-pluggy==1.0.0
+pluggy==1.6.0
+    # via pytest
+pygments==2.20.0
     # via pytest
 pylint==2.16.3
     # via -r dev-requirements.in
-pytest==7.2.2
+pytest==9.0.3
     # via
     #   -r dev-requirements.in
     #   pytest-mock
